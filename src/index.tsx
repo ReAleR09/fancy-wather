@@ -1,16 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import rootReducer from './reducers/rootReducer';
-
+import { AppStore } from './store/AppStore';
 import App from './components/App';
-
-const store = createStore(rootReducer);
+import { detectInitialLocation } from './actions/actions';
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider store={AppStore}>
     <App />
   </Provider>,
   document.getElementById('app'),
 );
+
+// requesting users location
+AppStore.dispatch(detectInitialLocation());

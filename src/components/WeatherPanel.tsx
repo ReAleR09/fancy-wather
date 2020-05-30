@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Paper } from '@material-ui/core';
-import { FullWeather, ApplicationState } from '../Store/ApplicationStore';
+import { FullWeather, ApplicationState } from '../state/ApplicationState';
 
 export interface WeatherPanelProps {
   weather: FullWeather;

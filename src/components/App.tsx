@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import {
-  Grid, Container, AppBar, Paper,
+  Grid, Container, AppBar,
 } from '@material-ui/core';
-import { YMaps, Map } from 'react-yandex-maps';
 import Header from './Header';
 import WeatherPanel from './WeatherPanel';
+import MapPanel from './MapPanel';
 
 
 const App = () => (
@@ -19,16 +19,7 @@ const App = () => (
         <WeatherPanel />
       </Grid>
       <Grid item xs={12} md={5}>
-        <Paper elevation={3}>
-          <YMaps>
-            <Map
-              defaultState={{ center: [55.75, 37.57], zoom: 9 }}
-              width="100%"
-              height="60vh"
-            />
-          </YMaps>
-          <div>Coordinates</div>
-        </Paper>
+        <MapPanel />
       </Grid>
     </Grid>
   </Container>

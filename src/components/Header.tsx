@@ -7,7 +7,7 @@ import {
   Language, LANG_NAMES, Temperature, TEMP_F, TEMP_C,
 } from '../Utils/Constants';
 import { changeLanguage, changeTemperatureFormat, setWeather } from '../actions/actions';
-import { ApplicationState } from '../Store/ApplicationStore';
+import { ApplicationState } from '../state/ApplicationState';
 
 export interface HeaderProps {
   language: Language,

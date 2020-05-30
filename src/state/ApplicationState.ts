@@ -13,17 +13,24 @@ export interface FullWeather extends DayWeather {
   foreCast: Array<DayWeather>;
 }
 
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
+
+export interface Location {
+  name: string;
+  timeZone: string;
+}
+
 export interface ApplicationState {
+  isRequesting: boolean;
   settings: {
     language: Language;
     temperatureFormat: Temperature;
     backgroundImage?: string;
   };
   weather?: FullWeather;
-  location?: {
-    lat: number;
-    lon: number;
-    name: string;
-    timeZone: string;
-  };
+  coords: Coordinates;
+  location?: Location;
 }
