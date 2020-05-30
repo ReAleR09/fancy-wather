@@ -6,7 +6,7 @@ import {
 import {
   Language, LANG_NAMES, Temperature, TEMP_F, TEMP_C,
 } from '../Utils/Constants';
-import { changeLanguage, changeTemperatureFormat, setWeather } from '../actions/creators';
+import { changeLanguage, changeTemperatureFormat, setWeather } from '../actions/actions';
 import { ApplicationState } from '../Store/ApplicationStore';
 
 export interface HeaderProps {
@@ -18,7 +18,7 @@ export interface HeaderProps {
   setWeather: (cityName: unknown) => void;
 }
 
-const SYMBOL_CELSIUS = '';
+const SYMBOL_CELSIUS = '°C';
 const SYMBOL_FAHRENHEIT = '°F';
 const STR_SEARCH = 'Поиск';
 

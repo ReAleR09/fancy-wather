@@ -1,7 +1,8 @@
-import { CHANGE_LANGUAGE, CHANGE_TEMPERATURE_FORMAT, SET_FULL_WEATHER } from '../actions/types';
 import { ApplicationState } from '../Store/ApplicationStore';
 import { LANG_EN, TEMP_C } from '../Utils/Constants';
-import { Action } from '../actions/creators';
+import {
+  Action, CHANGE_LANGUAGE, CHANGE_TEMPERATURE_FORMAT, SET_FULL_WEATHER,
+} from '../actions/actions';
 
 const initialState: ApplicationState = {
   settings: {
