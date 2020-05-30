@@ -1,6 +1,6 @@
 import * as TYPES from './types';
 import { Language, Temperature } from '../Utils/Constants';
-import { FullWeather } from '../reducers/rootReducer';
+import { FullWeather } from '../Store/ApplicationStore';
 
 export interface Action {
   type: string,
@@ -11,23 +11,17 @@ export interface Action {
 
 export type ActionCreator = (payload: any) => Action;
 
-export const changeLanguage = (newLang: Language) => {
-  return {
-    type: TYPES.CHANGE_LANGUAGE,
-    newLang
-  };
-};
+export const changeLanguage = (newLang: Language) => ({
+  type: TYPES.CHANGE_LANGUAGE,
+  newLang,
+});
 
-export const changeTemperatureFormat = (newTempFormat: Temperature) => {
-  return {
-    type: TYPES.CHANGE_TEMPERATURE_FORMAT,
-    newTempFormat
-  };  
-};
+export const changeTemperatureFormat = (newTempFormat: Temperature) => ({
+  type: TYPES.CHANGE_TEMPERATURE_FORMAT,
+  newTempFormat,
+});
 
-export const setWeather = (newWeather: FullWeather) => {
-  return {
-    type: TYPES.SET_FULL_WEATHER,
-    newWeather
-  }
-};
+export const setWeather = (newWeather: FullWeather) => ({
+  type: TYPES.SET_FULL_WEATHER,
+  newWeather,
+});

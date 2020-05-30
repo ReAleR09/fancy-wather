@@ -1,58 +1,51 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Paper } from '@material-ui/core';
-import { ApplicationState, FullWeather } from '../reducers/rootReducer';
+import { FullWeather, ApplicationState } from '../Store/ApplicationStore';
 
 export interface WeatherPanelProps {
   weather: FullWeather;
-};
+}
 
 const PLACEHOLDER = '--';
 
 const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: WeatherPanelProps) => {
-
-  let currentWeather: FullWeather = undefined;
-  if (props.weather) {
-    currentWeather = props.weather;
-  }
+  const { weather } = props;
 
   let foreCastElement;
-  if (currentWeather === undefined) {
-    foreCastElement = <div></div>;
+  if (weather === undefined) {
+    foreCastElement = <div />;
   } else {
-    foreCastElement = currentWeather.foreCast.map((daylyWeather) => {
-      return (
-        <div>
-          <div>{daylyWeather.dayOfWeek}</div>
-          <div>{daylyWeather.type}</div>
-          <div>{daylyWeather.temperature}</div>
-        </div>
-      );
-    })
+    foreCastElement = weather.foreCast.map((daylyWeather) => (
+      <div>
+        <div>{daylyWeather.dayOfWeek}</div>
+        <div>{daylyWeather.type}</div>
+        <div>{daylyWeather.temperature}</div>
+      </div>
+    ));
   }
-   
-  
+
   return (
-    <Paper elevation={3} style={{padding: "14px"}}>
+    <Paper elevation={3} style={{ padding: '14px' }}>
       <Grid container spacing={3} justify="space-between">
         <Grid item md={12}>
-          <div style={{fontSize: "4.4rem"}}>City name</div>
+          <div style={{ fontSize: '4.4rem' }}>City name</div>
         </Grid>
         <Grid item md={12}>
-          <div style={{fontSize: "2.2rem"}}>Date, time</div>
+          <div style={{ fontSize: '2.2rem' }}>Date, time</div>
         </Grid>
         <Grid item md={8}>
-          <div style={{fontSize: "24rem"}}>
-            {currentWeather ? currentWeather.temperature : PLACEHOLDER}
+          <div style={{ fontSize: '24rem' }}>
+            {weather ? weather.temperature : PLACEHOLDER}
           </div>
         </Grid>
         <Grid item md={4}>
           <div>
             <div>weather icon</div>
-            <div>{currentWeather ? currentWeather.type : PLACEHOLDER}</div>
-            <div>{currentWeather ? currentWeather.feels : PLACEHOLDER}</div>
-            <div>{currentWeather ? currentWeather.wind : PLACEHOLDER}</div>
-            <div>{currentWeather ? currentWeather.humidity : PLACEHOLDER}</div>
+            <div>{weather ? weather.type : PLACEHOLDER}</div>
+            <div>{weather ? weather.feels : PLACEHOLDER}</div>
+            <div>{weather ? weather.wind : PLACEHOLDER}</div>
+            <div>{weather ? weather.humidity : PLACEHOLDER}</div>
           </div>
         </Grid>
         <Grid item md={12}>
@@ -63,14 +56,12 @@ const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: Weather
       </Grid>
     </Paper>
   );
-}
-
-const mapStateToProps = (state: ApplicationState /*, ownProps */) => {
-  return {
-    weather: state.weather
-  };
 };
 
+const mapStateToProps = (state: ApplicationState /* , ownProps */) => ({
+  weather: state.weather,
+});
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
 )(WeatherPanel);

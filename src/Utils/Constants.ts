@@ -6,7 +6,7 @@ export const LANG_BE = 'BE';
 export const LANG_NAMES = [
   LANG_EN,
   LANG_RU,
-  LANG_BE
+  LANG_BE,
 ];
 
 export type Temperature = 'C' | 'F';

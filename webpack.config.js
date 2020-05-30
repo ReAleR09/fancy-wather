@@ -16,8 +16,8 @@ module.exports = (env, options) => {
     devServer: {
       port: 8080,
     },
-    mode: mode,
-    devtool: devtool,
+    mode,
+    devtool,
     watch,
     entry: [
       './src/index.tsx',
@@ -27,10 +27,8 @@ module.exports = (env, options) => {
       filename: 'js/script.js',
       path: path.resolve(__dirname, 'dist'),
     },
-
     resolve: {
-        // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: ['.ts', '.tsx', '.js', '.jsx']
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
 
     plugins: [
@@ -49,40 +47,50 @@ module.exports = (env, options) => {
     ],
 
     module: {
-        rules: [
+      rules: [
+        {
+          test: /\.ts(x?)$/,
+          exclude: /node_modules/,
+          use: [
             {
-                test: /\.ts(x?)$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                        loader: "ts-loader"
-                    }
-                ]
-            },
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            {
-                enforce: "pre",
-                test: /\.js$/,
-                loader: "source-map-loader"
+              loader: 'ts-loader',
             },
             {
-              test: /\.scss$/,
-              use: [
-                MiniCssExtractPlugin.loader,
-                {
-                  loader: 'css-loader',
-                  options: {
-                    url: false,
-                  },
-                },
-                'sass-loader',
-              ],
+              loader: 'eslint-loader',
+              options: {
+                cache: true,
+                emitError: isProduction,
+                failOnError: isProduction,
+                emitWarning: isProduction,
+                failOnWarning: isProduction,
+              },
             },
+          ],
+        },
+        // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+        {
+          enforce: 'pre',
+          test: /\.js$/,
+          loader: 'source-map-loader',
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
             {
-              test: /\.html$/,
-              loader: 'html-loader',
+              loader: 'css-loader',
+              options: {
+                url: false,
+              },
             },
-        ]
+            'sass-loader',
+          ],
+        },
+        {
+          test: /\.html$/,
+          loader: 'html-loader',
+        },
+      ],
     },
 
     // When importing a module whose path matches one of the following, just
@@ -90,9 +98,9 @@ module.exports = (env, options) => {
     // This is important because it allows us to avoid bundling all of our
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {
-        "react": "React",
-        "react-dom": "ReactDOM"
-    }
+      react: 'React',
+      'react-dom': 'ReactDOM',
+    },
   };
 
   return config;
