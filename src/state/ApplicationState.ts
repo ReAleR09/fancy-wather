@@ -6,6 +6,11 @@ interface DayWeather {
   dayOfWeek?: number;
 }
 
+export interface LocationData {
+  locationName: string;
+  timezoneOffsetSec: number;
+}
+
 export interface FullWeather extends DayWeather {
   feels: number;
   wind: number;
@@ -32,5 +37,5 @@ export interface ApplicationState {
   };
   weather?: FullWeather;
   coords: Coordinates;
-  location?: Location;
+  location?: LocationData;
 }

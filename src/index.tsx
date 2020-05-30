@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { AppStore } from './store/AppStore';
 import App from './components/App';
-import { detectInitialLocationAndWeather } from './actions/actions';
+import { detectInitialLocation } from './actions/actions';
 
 ReactDOM.render(
   <Provider store={AppStore}>
@@ -13,4 +13,4 @@ ReactDOM.render(
 );
 
 // requesting users location
-AppStore.dispatch(detectInitialLocationAndWeather());
+AppStore.dispatch(detectInitialLocation());

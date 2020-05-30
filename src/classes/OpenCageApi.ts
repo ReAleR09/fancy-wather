@@ -1,31 +1,40 @@
-import { Coordinates } from '../state/ApplicationState';
+import { Coordinates, LocationData } from '../state/ApplicationState';
 import AppConfig from '../config';
-
-type LocationData = {
-  country: string;
-  countryCode: string;
-  city: string;
-}
 
 const { apiKey, baseUrl } = AppConfig.openCage;
 
-const getLocationDataByCoordinates = (coords: Coordinates, language: string = 'en'): Promise<LocationData> => {
+const COMP_COUNTRY = 'country';
+const COMP_CITY = 'city';
+const COMP_COUNTY = 'county';
+
+const getLocationData = (coords: Coordinates, language: string = 'en', limit: number = 1): Promise<LocationData> => {
   const latLon = `${coords.latitude}+${coords.longitude}`;
-  const requestUri = `${baseUrl}?key=${apiKey}&q=${latLon}&language=${language}`;
+  const requestLang = language.toLocaleLowerCase();
+  const requestUri = `${baseUrl}?key=${apiKey}&q=${latLon}&language=${requestLang}&limi=${limit}`;
 
   const promise = fetch(requestUri)
     .then((response) => response.json())
     .then((data) => {
-      const { components } = data.results[0];
+      const result = data.results[0];
+      const { components } = result;
+      const locationParts: Array<string> = [];
 
-      const { country } = components;
-      const countryCode = components.country_code;
-      const city = `${components.state}, ${components.city}`;
+      if (components[COMP_CITY]) {
+        locationParts.push(components[COMP_CITY]);
+      } else if (components[COMP_COUNTY]) {
+        locationParts.push(components[COMP_COUNTY]);
+      }
+      if (components[COMP_COUNTRY]) {
+        locationParts.push(components[COMP_COUNTRY]);
+      }
+
+      const locationName = locationParts.join(', ');
+
+      const timezoneOffsetSec = result.annotations.timezone.offset_sec;
 
       return {
-        country,
-        countryCode,
-        city,
+        locationName,
+        timezoneOffsetSec,
       };
     });
 
@@ -33,7 +42,7 @@ const getLocationDataByCoordinates = (coords: Coordinates, language: string = 'e
 };
 
 const OpenCageApi = {
-  getLocationDataByCoordinates,
+  getLocationData,
 };
 
 export default OpenCageApi;

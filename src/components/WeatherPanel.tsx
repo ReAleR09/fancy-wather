@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Paper } from '@material-ui/core';
 import { FullWeather, ApplicationState } from '../state/ApplicationState';
+import LocationDataComponent from './LocationDataComponent';
 
 export interface WeatherPanelProps {
   weather: FullWeather;
@@ -28,12 +29,7 @@ const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: Weather
   return (
     <Paper elevation={3} style={{ padding: '14px' }}>
       <Grid container spacing={3} justify="space-between">
-        <Grid item md={12}>
-          <div style={{ fontSize: '4.4rem' }}>City name</div>
-        </Grid>
-        <Grid item md={12}>
-          <div style={{ fontSize: '2.2rem' }}>Date, time</div>
-        </Grid>
+        <LocationDataComponent />
         <Grid item md={8}>
           <div style={{ fontSize: '24rem' }}>
             {weather ? weather.temperature : PLACEHOLDER}
@@ -58,7 +54,7 @@ const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: Weather
   );
 };
 
-const mapStateToProps = (state: ApplicationState /* , ownProps */) => ({
+const mapStateToProps = (state: ApplicationState) => ({
   weather: state.weather,
 });
 
