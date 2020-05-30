@@ -6,7 +6,7 @@ import {
 import {
   Language, LANG_NAMES, Temperature, TEMP_F, TEMP_C,
 } from '../Utils/Constants';
-import { changeLanguage, changeTemperatureFormat, setWeather } from '../actions/actions';
+import { changeLanguage, changeTemperatureFormat } from '../actions/actions';
 import { ApplicationState } from '../state/ApplicationState';
 
 export interface HeaderProps {
@@ -14,8 +14,6 @@ export interface HeaderProps {
   changeLanguage: (newVal: unknown) => void;
   temperatueFormat: Temperature;
   changeTemperatureFormat: (newVal: unknown) => void;
-  // TODO: remove
-  setWeather: (cityName: unknown) => void;
 }
 
 const SYMBOL_CELSIUS = '°C';
@@ -78,7 +76,7 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
           <Button
             variant="outlined"
             onClick={() => {
-              props.setWeather(searchInput);
+              console.log(searchInput);
             }}
           >
             {STR_SEARCH}
@@ -97,7 +95,6 @@ const mapStateToProps = (state: ApplicationState /* , ownProps */) => ({
 const mapDispatchToProps = {
   changeLanguage,
   changeTemperatureFormat,
-  setWeather, // TODO remove
 };
 
 export default connect(
