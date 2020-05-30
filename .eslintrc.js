@@ -1,4 +1,4 @@
-{
+module.exports = {
     "env": {
         "browser": true,
         "es6": true
@@ -16,7 +16,7 @@
         "ecmaFeatures": {
             "jsx": true
         },
-        "ecmaVersion": 11,
+        "ecmaVersion": 2018,
         "sourceType": "module"
     },
     "plugins": [
@@ -24,7 +24,5 @@
         "@typescript-eslint"
     ],
     "rules": {
-      "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }],
-      "react/destructuring-assignment": [true, "never", { "ignoreClassFields": <boolean> }]
     }
-}
+};

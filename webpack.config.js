@@ -1,5 +1,8 @@
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
@@ -18,6 +21,7 @@ module.exports = (env, options) => {
     watch,
     entry: [
       './src/index.tsx',
+      './src/styles/style.scss',
     ],
     output: {
       filename: 'js/script.js',
@@ -30,8 +34,17 @@ module.exports = (env, options) => {
     },
 
     plugins: [
+      new CleanWebpackPlugin(),
+      new CopyPlugin({
+        patterns: [
+          { from: 'assets/', to: 'assets/' },
+        ],
+      }),
       new HtmlWebpackPlugin({
         template: 'index.html',
+      }),
+      new MiniCssExtractPlugin({
+        filename: 'css/style.css',
       }),
     ],
 
@@ -51,7 +64,24 @@ module.exports = (env, options) => {
                 enforce: "pre",
                 test: /\.js$/,
                 loader: "source-map-loader"
-            }
+            },
+            {
+              test: /\.scss$/,
+              use: [
+                MiniCssExtractPlugin.loader,
+                {
+                  loader: 'css-loader',
+                  options: {
+                    url: false,
+                  },
+                },
+                'sass-loader',
+              ],
+            },
+            {
+              test: /\.html$/,
+              loader: 'html-loader',
+            },
         ]
     },
 
