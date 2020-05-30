@@ -1,0 +1,23 @@
+// .header {
+//   display: -webkit-box;
+//   display: flex;
+//   flex-wrap: wrap;
+//   -webkit-box-pack: justify;
+//   justify-content: space-between;
+//   margin: 4rem 0;
+// }
+
+.button {
+  &__update {
+    background: rgba(180,184,187,.7) url(/assets/icons/update-button.svg) no-repeat bottom;
+    background-size: 4.4rem;
+  }
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  background: url(/assets/icons/spinner.svg) 50% no-repeat;
+  -webkit-animation: spin 1.4s ease-in-out;
+  animation: spin 1.4s ease-in-out;
+}
