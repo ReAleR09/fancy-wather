@@ -4,16 +4,18 @@ import {
   MenuItem, Select, Button, Grid, TextField, Toolbar,
 } from '@material-ui/core';
 import {
-  Language, LANG_NAMES, Temperature, TEMP_F, TEMP_C,
+  Language, LANG_NAMES, Temperature, TEMP_F, TEMP_C, STORAGE_LANG, STORAGE_TEMP_TYPE,
 } from '../Utils/Constants';
-import { changeLanguage, changeTemperatureFormat } from '../actions/actions';
+import { changeLanguage, changeTemperatureFormat, findLocationByQuery } from '../actions/actions';
 import { ApplicationState } from '../state/ApplicationState';
+import LocalStorage from '../Utils/LocalStorage';
 
 export interface HeaderProps {
   language: Language,
   changeLanguage: (newVal: unknown) => void;
   temperatueFormat: Temperature;
   changeTemperatureFormat: (newVal: unknown) => void;
+  findLocationByQuery: (query: string) => void;
 }
 
 const SYMBOL_CELSIUS = '°C';
@@ -27,6 +29,7 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
 
   const dispatchSwitchTempFormat = (newTempFormat: Temperature) => {
     props.changeTemperatureFormat(newTempFormat);
+    LocalStorage.set(STORAGE_TEMP_TYPE, newTempFormat);
   };
 
   const [searchInput, setSearchInput] = React.useState('');
@@ -43,6 +46,7 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
             style={{ color: 'white!important' }}
             onChange={(event) => {
               props.changeLanguage(event.target.value);
+              LocalStorage.set(STORAGE_LANG, event.target.value);
             }}
           >
             {languages}
@@ -72,11 +76,16 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
             onChange={(event) => {
               setSearchInput(event.target.value);
             }}
+            onKeyDown={(event) => {
+              if (event.key === 'NumpadEnter' || event.key === 'Enter') {
+                props.findLocationByQuery(searchInput);
+              }
+            }}
           />
           <Button
             variant="outlined"
             onClick={() => {
-              console.log(searchInput);
+              props.findLocationByQuery(searchInput);
             }}
           >
             {STR_SEARCH}
@@ -95,6 +104,7 @@ const mapStateToProps = (state: ApplicationState /* , ownProps */) => ({
 const mapDispatchToProps = {
   changeLanguage,
   changeTemperatureFormat,
+  findLocationByQuery,
 };
 
 export default connect(

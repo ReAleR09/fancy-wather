@@ -7,10 +7,26 @@ const COMP_COUNTRY = 'country';
 const COMP_CITY = 'city';
 const COMP_COUNTY = 'county';
 
+const getCoordinatesByQuery = (query: string, limit: number = 1): Promise<Coordinates> => {
+  const requestUri = `${baseUrl}?key=${apiKey}&q=${query}}&limit=${limit}`;
+  const promise = fetch(requestUri)
+    .then((response) => response.json())
+    .then((data) => {
+      const result = data.results[0];
+      const { lat, lng } = result.geometry;
+      return {
+        latitude: lat,
+        longitude: lng,
+      };
+    });
+
+  return promise;
+};
+
 const getLocationData = (coords: Coordinates, language: string = 'en', limit: number = 1): Promise<LocationData> => {
   const latLon = `${coords.latitude}+${coords.longitude}`;
   const requestLang = language.toLocaleLowerCase();
-  const requestUri = `${baseUrl}?key=${apiKey}&q=${latLon}&language=${requestLang}&limi=${limit}`;
+  const requestUri = `${baseUrl}?key=${apiKey}&q=${latLon}&language=${requestLang}&limit=${limit}`;
 
   const promise = fetch(requestUri)
     .then((response) => response.json())
@@ -43,6 +59,7 @@ const getLocationData = (coords: Coordinates, language: string = 'en', limit: nu
 
 const OpenCageApi = {
   getLocationData,
+  getCoordinatesByQuery,
 };
 
 export default OpenCageApi;

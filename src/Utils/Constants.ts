@@ -22,3 +22,6 @@ export const LOCALES: Locales = {
   [LANG_EN]: 'en-US',
   [LANG_BE]: 'be-BY',
 };
+
+export const STORAGE_LANG = 'STORAGE_LANG';
+export const STORAGE_TEMP_TYPE = 'STORAGE_TEMP_TYPE';

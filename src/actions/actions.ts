@@ -55,6 +55,26 @@ export const detectInitialLocation = () => {
   return thunkedAction;
 };
 
+export const findLocationByQuery = (query: string) => {
+  const thunkedAction = async (dispatch: Dispatch) => {
+    if (query.trim().length < 3) {
+      return;
+    }
+    try {
+      const newCoordinates = await OpenCageApi
+        .getCoordinatesByQuery(query);
+
+      dispatch(setCoordinates(newCoordinates));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      console.log('findLocationByQuery done');
+    }
+  };
+
+  return thunkedAction;
+};
+
 export const SET_LOCATION_DATA = 'SET_LOCATION_DATA';
 export const setLocationData = (payload: { locationName: string, timezone: string }) => ({
   type: SET_LOCATION_DATA,
