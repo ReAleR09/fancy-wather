@@ -11,7 +11,7 @@ export interface LocationDataComponentProps {
   coords: Coordinates;
   language: Language;
   locationData: LocationData;
-  getLocationData: (coords: Coordinates, language: Language) => void;
+  getLocationData: (coords: Coordinates, language: Language) => Promise<void>;
 }
 
 const PLACEHOLDER = '--';

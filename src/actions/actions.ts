@@ -3,6 +3,7 @@ import { Language, Temperature } from '../Utils/Constants';
 import { Coordinates, ApplicationState, FullWeather } from '../state/ApplicationState';
 import GeoLocation from '../classes/GeoLocation';
 import OpenCageApi from '../classes/OpenCageApi';
+import UnsplashApi from '../classes/UnsplashApi';
 import OpenWeatherMapApi from '../classes/OpenWeatherMapApi';
 
 export interface Action {
@@ -14,13 +15,9 @@ export interface Action {
   locationName?: string;
   timezone?: number;
   newWeather?: FullWeather;
+  statusValue?: boolean;
+  status: string;
 }
-
-export const SET_REQUEST_STATE = 'SET_REQUEST_STATE';
-export const setRequestState = (isRequesting: boolean) => ({
-  type: SET_REQUEST_STATE,
-  isRequesting,
-});
 
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
 export const changeLanguage = (newLang: Language) => ({
@@ -55,6 +52,13 @@ export const detectInitialLocation = () => {
   return thunkedAction;
 };
 
+export const CHANGE_REQUEST_STATUS = 'CHANGE_REQUEST_STATUS';
+export const changeRequestStatus = (status: string, statusValue: boolean) => ({
+  type: CHANGE_REQUEST_STATUS,
+  status,
+  statusValue,
+});
+
 export const findLocationByQuery = (query: string) => {
   const thunkedAction = async (dispatch: Dispatch) => {
     if (query.trim().length < 3) {
@@ -84,6 +88,7 @@ export const setLocationData = (payload: { locationName: string, timezone: strin
 export const getLocationData = (coords: Coordinates, language: string) => {
   const thunkedAction = async (dispatch: Dispatch) => {
     try {
+      dispatch(changeRequestStatus('locationData', true));
       const geoCoderResponse = await OpenCageApi
         .getLocationData(coords, language);
       console.log(geoCoderResponse);
@@ -92,7 +97,7 @@ export const getLocationData = (coords: Coordinates, language: string) => {
     } catch (error) {
       console.error(error);
     } finally {
-      console.log('getLocationDataByCoordinatesAndLanguage done');
+      dispatch(changeRequestStatus('locationData', false));
     }
   };
 
@@ -108,6 +113,7 @@ export const setWeatherData = (newWeather: FullWeather) => ({
 export const getWeatherForLocation = () => {
   const thunkedAction = async (dispatch: Dispatch, getState: () => ApplicationState) => {
     try {
+      dispatch(changeRequestStatus('weather', true));
       const state: ApplicationState = getState();
       const { coords } = state;
       const weather = await OpenWeatherMapApi.getWeatherByCoordinates(coords);
@@ -115,7 +121,68 @@ export const getWeatherForLocation = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      console.log('getWeatherForLocation done');
+      dispatch(changeRequestStatus('weather', false));
+    }
+  };
+
+  return thunkedAction;
+};
+
+export const changeBackgroundImage = () => {
+  const thunkedAction = async (dispatch: Dispatch, getState: () => ApplicationState) => {
+    try {
+      const state: ApplicationState = getState();
+      // we didn't set any location data yet, meaning we're only on the startup of the app
+      if (state.location === undefined) return;
+
+      const keyWords: Array<string> = [];
+      const timeZone = state.location.timezone;
+
+      const weatherKeyword = `${state.weather.type} weather`;
+
+      keyWords.push(weatherKeyword);
+      // getting time dependant keywords
+      const date = new Date();
+      const formatter = new Intl.DateTimeFormat(
+        'en-US',
+        {
+          timeZone,
+          hour: 'numeric',
+          month: 'long',
+        },
+      );
+      const parts = formatter.formatToParts(date);
+      const monthName = parts[0].value;
+      keyWords.push(monthName);
+      const hourDigit = Number.parseInt(parts[2].value, 10);
+      const dayPart = parts[4].value;
+      let timeOfDayKeyword;
+      if (dayPart === 'PM') {
+        if (hourDigit < 6) {
+          timeOfDayKeyword = 'day';
+        } else {
+          timeOfDayKeyword = 'evening';
+        }
+      } else if (hourDigit < 6) {
+        timeOfDayKeyword = 'night';
+      } else {
+        timeOfDayKeyword = 'morning';
+      }
+      keyWords.push(timeOfDayKeyword);
+
+      const imgUrl = await UnsplashApi.getRandomPhotoByKeywords(keyWords);
+
+      const image = new Image();
+      image.addEventListener('load', () => {
+        document.body.setAttribute('style', `background-image: url(${imgUrl})`);
+      });
+      image.src = imgUrl;
+
+      console.log(imgUrl);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      console.log('changeBackgroundImage done');
     }
   };
 

@@ -4,35 +4,30 @@ import {
   Grid, Container, AppBar,
 } from '@material-ui/core';
 import Header from './Header';
-import WeatherPanel from './WeatherPanel';
+import WeatherPanel from './WeatherPanel/WeatherPanel';
 import MapPanel from './MapPanel';
+import BackgroundChanger from './renderless/BackgroundChanger';
 
 
 const App = () => (
-  <Container maxWidth="xl">
-    <AppBar position="static">
-      <Header />
-    </AppBar>
+  <>
+    <BackgroundChanger />
+    <Container maxWidth="xl">
+      <AppBar position="static">
+        <Header />
+      </AppBar>
 
-    <Grid container spacing={3} justify="space-between" style={{ marginTop: '10px' }}>
-      <Grid item xs={12} md={7}>
-        <WeatherPanel />
+      <Grid container spacing={3} justify="space-between" style={{ marginTop: '10px' }}>
+        <Grid item xs={12} md={7}>
+          <WeatherPanel />
+        </Grid>
+        <Grid item xs={12} md={5}>
+          <MapPanel />
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={5}>
-        <MapPanel />
-      </Grid>
-    </Grid>
-  </Container>
+    </Container>
+  </>
 );
-// const mapStateToProps = (state: ApplicationState /*, ownProps */) => {
-//   return {
-//     counter: state.counter,
-//   };
-// };
 
-// const mapDispatchToProps = { increment, decrement, reset }
 
-export default connect(
-  // mapStateToProps,
-  // mapDispatchToProps,
-)(App);
+export default connect()(App);

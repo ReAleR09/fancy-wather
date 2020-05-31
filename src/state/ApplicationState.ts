@@ -30,7 +30,6 @@ export interface Location {
 }
 
 export interface ApplicationState {
-  isRequesting: boolean;
   settings: {
     language: Language;
     temperatureFormat: Temperature;
@@ -39,4 +38,9 @@ export interface ApplicationState {
   weather?: FullWeather;
   coords?: Coordinates;
   location?: LocationData;
+  keywords: Array<string> | 'random';
+  requests: {
+    weather: boolean;
+    location: boolean;
+  }
 }

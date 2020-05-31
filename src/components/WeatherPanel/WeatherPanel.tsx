@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Paper } from '@material-ui/core';
-import { FullWeather, ApplicationState } from '../state/ApplicationState';
-import LocationDataComponent from './LocationDataComponent';
-import { getWeatherForLocation } from '../actions/actions';
-import { Temperature, Language } from '../Utils/Constants';
-import { formatToMeasure as tFormat } from '../Utils/TemperatureUtils';
+import { FullWeather, ApplicationState } from '../../state/ApplicationState';
+import LocationDataComponent from '../LocationDataComponent';
+import { getWeatherForLocation } from '../../actions/actions';
+import { Temperature, Language } from '../../Utils/Constants';
+import { formatToMeasure as tFormat } from '../../Utils/TemperatureUtils';
+import W_TRANS from './WeatherConditions';
+import { getNextThreeWeekDays } from '../../Utils/Time';
 
 export interface WeatherPanelProps {
   weather: FullWeather;
   coords: Coordinates;
   temperatureFormat: Temperature;
   language: Language;
-  getWeatherForLocation: (coords: Coordinates) => void;
+  getWeatherForLocation: (coords: Coordinates) => Promise<void>;
+  timeZone?: string;
 }
 
 const PLACEHOLDER = '--';
@@ -20,8 +23,9 @@ const PLACEHOLDER = '--';
 const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: WeatherPanelProps) => {
   const {
     weather, coords, temperatureFormat,
-    // language
+    language, timeZone,
   } = props;
+
 
   React.useEffect(
     () => {
@@ -32,15 +36,16 @@ const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: Weather
   );
 
   let foreCastElement;
-  if (weather === undefined) {
+  if (weather === undefined || timeZone === undefined) {
     foreCastElement = <div />;
   } else {
+    const weekDayNames = getNextThreeWeekDays(timeZone, language);
     foreCastElement = weather.foreCast.map((daylyWeather) => {
-      console.log('mappin');
+      const weekdayName = weekDayNames.shift();
       return (
-        <div>
-          <div>DayOfWeek</div>
-          <div>{daylyWeather.type}</div>
+        <div key={weekdayName}>
+          <div>{weekdayName}</div>
+          <div>{W_TRANS(language, daylyWeather.type)}</div>
           <div>{tFormat(daylyWeather.temperature, temperatureFormat)}</div>
         </div>
       );
@@ -48,7 +53,7 @@ const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: Weather
   }
 
   return (
-    <Paper elevation={3} style={{ padding: '14px' }}>
+    <Paper elevation={3} className="weather">
       <Grid container spacing={3} justify="space-between">
         <LocationDataComponent />
         <Grid item md={8}>
@@ -58,8 +63,13 @@ const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: Weather
         </Grid>
         <Grid item md={4}>
           <div>
-            <div className="weather__current_icon">weather icon</div>
-            <div className="weather__current_desc">{weather ? weather.type : PLACEHOLDER}</div>
+            <div
+              className="weather__current_icon"
+              style={{
+                backgroundImage: weather ? `url(${weather.icon})` : 'none',
+              }}
+            />
+            <div className="weather__current_desc">{weather ? W_TRANS(language, weather.type) : PLACEHOLDER}</div>
             <div className="weather__current_feels">{weather ? tFormat(weather.feels, temperatureFormat) : PLACEHOLDER}</div>
             <div className="weather__current_wind">{weather ? weather.wind : PLACEHOLDER}</div>
             <div className="weather__current_humidity">{weather ? weather.humidity : PLACEHOLDER}</div>
@@ -80,6 +90,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   coords: state.coords,
   temperatureFormat: state.settings.temperatureFormat,
   language: state.settings.language,
+  timeZone: state.location ? state.location.timezone : undefined,
 });
 
 const mapDispatchToProps = { getWeatherForLocation };

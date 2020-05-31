@@ -4,7 +4,7 @@ import {
 } from '../Utils/Constants';
 import {
   Action, CHANGE_LANGUAGE, CHANGE_TEMPERATURE_FORMAT,
-  SET_COORDINATES, SET_LOCATION_DATA, SET_WEATHER_DATA,
+  SET_COORDINATES, SET_LOCATION_DATA, SET_WEATHER_DATA, CHANGE_REQUEST_STATUS,
 } from '../actions/actions';
 import LocalStorage from '../Utils/LocalStorage';
 
@@ -20,12 +20,15 @@ if (storedTFormat !== null) {
   INIT_TEMP_FORMAT = storedTFormat;
 }
 
-
 const initialState: ApplicationState = {
-  isRequesting: false,
   settings: {
     language: INIT_LANGUAGE,
     temperatureFormat: INIT_TEMP_FORMAT,
+  },
+  keywords: 'random',
+  requests: {
+    weather: false,
+    location: false,
   },
 };
 
@@ -54,6 +57,18 @@ const rootReducer = (state: ApplicationState = initialState, action: Action) => 
         ...newState,
         weather: action.newWeather,
       };
+    case CHANGE_REQUEST_STATUS:
+      switch (action.status) {
+        case 'locationData':
+          newState.requests.location = action.statusValue;
+          break;
+        case 'weather':
+          newState.requests.weather = action.statusValue;
+          break;
+        default:
+          console.log(`Incorrect request status name: ${action.status}`);
+      }
+      return newState;
     default:
       return state;
   }

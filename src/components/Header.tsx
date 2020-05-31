@@ -4,11 +4,13 @@ import {
   MenuItem, Select, Button, Grid, TextField, Toolbar,
 } from '@material-ui/core';
 import {
-  Language, LANG_NAMES, Temperature, TEMP_F, TEMP_C, STORAGE_LANG, STORAGE_TEMP_TYPE,
+  Language, LANG_NAMES, Temperature, TEMP_F, TEMP_C,
+  STORAGE_LANG, STORAGE_TEMP_TYPE, LANG_RU, LANG_EN, LANG_BE,
 } from '../Utils/Constants';
 import { changeLanguage, changeTemperatureFormat, findLocationByQuery } from '../actions/actions';
 import { ApplicationState } from '../state/ApplicationState';
 import LocalStorage from '../Utils/LocalStorage';
+import { createTranslator, TranslationsTree } from '../Utils/Translator';
 
 export interface HeaderProps {
   language: Language,
@@ -18,9 +20,23 @@ export interface HeaderProps {
   findLocationByQuery: (query: string) => void;
 }
 
+const TRANSLATIONS: TranslationsTree = {
+  INPUT_PLACEHOLDER: {
+    [LANG_RU]: 'Найти город или индекс',
+    [LANG_EN]: 'Find city or post index',
+    [LANG_BE]: 'Знайсці горад або індэкс',
+  },
+  SEARCH_BUTTON: {
+    [LANG_RU]: 'Найти',
+    [LANG_EN]: 'Search',
+    [LANG_BE]: 'Пошук',
+  },
+};
+
+const TRANSLATOR = createTranslator(TRANSLATIONS);
+
 const SYMBOL_CELSIUS = '°C';
 const SYMBOL_FAHRENHEIT = '°F';
-const STR_SEARCH = 'Поиск';
 
 const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
   const languages = LANG_NAMES.map((lang) => (<MenuItem key={lang} value={lang}>{lang}</MenuItem>));
@@ -68,7 +84,7 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
         </Grid>
         <Grid item xs={12} md={4} style={{ display: 'flex' }}>
           <TextField
-            label="Найти город или индекс"
+            label={TRANSLATOR(language, 'INPUT_PLACEHOLDER')}
             variant="standard"
             type="search"
             placeholder="*"
@@ -88,7 +104,7 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
               props.findLocationByQuery(searchInput);
             }}
           >
-            {STR_SEARCH}
+            {TRANSLATOR(language, 'SEARCH_BUTTON')}
           </Button>
         </Grid>
       </Grid>

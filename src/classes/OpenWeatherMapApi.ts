@@ -20,7 +20,7 @@ const getWeatherByCoordinates = (coords: Coordinates): Promise<FullWeather> => {
       const full: FullWeather = {
         temperature: temp,
         type: main,
-        icon,
+        icon: `http://openweathermap.org/img/wn/${icon}@2x.png`,
         feels: feels_like,
         wind: wind_speed,
         humidity,
@@ -31,7 +31,7 @@ const getWeatherByCoordinates = (coords: Coordinates): Promise<FullWeather> => {
         const dayWeather: DayWeather = {
           temperature: dayObj.temp.day,
           type: dayObj.weather[0].main,
-          icon: dayObj.weather[0].icon,
+          icon: `http://openweathermap.org/img/wn/${dayObj.weather[0].icon}@2x.png`,
         };
         return dayWeather;
       });

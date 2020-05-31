@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Paper } from '@material-ui/core';
-import { YMaps, Map } from 'react-yandex-maps';
+import { YMaps, Map, Placemark } from 'react-yandex-maps';
 import { Coordinates, ApplicationState } from '../state/ApplicationState';
 import AppConfig from '../config';
 import { Language, LANG_EN } from '../Utils/Constants';
@@ -33,7 +33,9 @@ const MapPanel: React.FunctionComponent<MapPanelProps> = (props: MapPanelProps) 
           state={{ center, zoom: 10 }}
           width="100%"
           height="60vh"
-        />
+        >
+          <Placemark geometry={center} />
+        </Map>
       </YMaps>
       <div>
         <div>

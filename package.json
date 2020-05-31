@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "webpack-dev-server --watch true"
+    "serve": "webpack-dev-server --watch true",
+    "prod": "webpack --mode production",
+    "lint": "eslint --ignore-path .gitignore ./src --ext .ts,.tsx"
   },
   "keywords": [],
   "author": "ReAleR09",

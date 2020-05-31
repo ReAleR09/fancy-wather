@@ -1,11 +1,12 @@
-// .header {
-//   display: -webkit-box;
-//   display: flex;
-//   flex-wrap: wrap;
-//   -webkit-box-pack: justify;
-//   justify-content: space-between;
-//   margin: 4rem 0;
-// }
+body {
+  position: relative;
+  height: 98vh;
+  background: linear-gradient(180deg,rgba(8,15,26,.59),rgba(17,17,46,.46)) 50% fixed,url(/assets/img/bg-default.jpg) no-repeat 50% fixed;
+  background-size: cover;
+  padding-top: 1px;
+  margin-top: -1px;
+  animation: smoothAppearance 2s ease-in-out;
+}
 
 .button {
   &__update {
@@ -23,24 +24,28 @@
 }
 
 .weather {
+  background-color: rgba($color:#FFFFFF, $alpha: 0.6)!important;
+  padding: 14px;
   &__current {
     &_temp {
       font-size: 16rem;
     }
     &_icon {
-
+      width: 8rem;
+      height: 8rem;
+      background-size: cover;
     }
     &_desc {
-
+      font-size: 3rem;
     }
     &_feels {
-
+      font-size: 2rem;
     }
     &_wind {
-
+      font-size: 2rem;
     }
     &_humidity {
-
+      font-size: 2rem;
     }
   }
 }
