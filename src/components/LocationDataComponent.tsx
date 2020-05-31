@@ -3,15 +3,9 @@ import * as React from 'react';
 import { Grid } from '@material-ui/core';
 import { Coordinates, LocationData, ApplicationState } from '../state/ApplicationState';
 import { Language } from '../Utils/Constants';
+import { getCurrentWithTimezoneOffset } from '../Utils/Time';
 import { getLocationData } from '../actions/actions';
 
-const getCurrentWithTimezoneOffset = (
-  timezoneOffsetSec: number,
-  language: Language,
-): string => {
-  const dateTimeString = `${timezoneOffsetSec} and ${language}`;
-  return dateTimeString;
-};
 
 export interface LocationDataComponentProps {
   coords: Coordinates;
@@ -29,6 +23,7 @@ const LocationDataComponent: React.FunctionComponent<LocationDataComponentProps>
 
   // if coords or language changes
   // we tell app to request API and update the state of store.locationData
+  // (timezone and location name)
   React.useEffect(
     () => {
       if (coords === undefined) return;
@@ -44,7 +39,7 @@ const LocationDataComponent: React.FunctionComponent<LocationDataComponentProps>
     const interval = setInterval(() => {
       if (locationData) {
         const resultDateTimeString = getCurrentWithTimezoneOffset(
-          locationData.timezoneOffsetSec,
+          locationData.timezone,
           language,
         );
         setDateTimeString(resultDateTimeString);

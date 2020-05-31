@@ -1,15 +1,12 @@
 import { ApplicationState } from '../state/ApplicationState';
 import { LANG_EN, TEMP_C } from '../Utils/Constants';
 import {
-  Action, CHANGE_LANGUAGE, CHANGE_TEMPERATURE_FORMAT, SET_COORDINATES, SET_LOCATION_DATA,
+  Action, CHANGE_LANGUAGE, CHANGE_TEMPERATURE_FORMAT,
+  SET_COORDINATES, SET_LOCATION_DATA, SET_WEATHER_DATA,
 } from '../actions/actions';
 
 const initialState: ApplicationState = {
   isRequesting: false,
-  coords: {
-    latitude: 55.75,
-    longitude: 37.57,
-  },
   settings: {
     language: LANG_EN,
     temperatureFormat: TEMP_C,
@@ -33,8 +30,13 @@ const rootReducer = (state: ApplicationState = initialState, action: Action) => 
         ...newState,
         location: {
           locationName: action.locationName,
-          timezoneOffsetSec: action.timezoneOffsetSec,
+          timezone: action.timezone,
         },
+      };
+    case SET_WEATHER_DATA:
+      return {
+        ...newState,
+        weather: action.newWeather,
       };
     default:
       return state;

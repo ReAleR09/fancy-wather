@@ -1,17 +1,19 @@
 import { Dispatch } from 'redux';
 import { Language, Temperature } from '../Utils/Constants';
-import { Coordinates } from '../state/ApplicationState';
+import { Coordinates, ApplicationState, FullWeather } from '../state/ApplicationState';
 import GeoLocation from '../classes/GeoLocation';
 import OpenCageApi from '../classes/OpenCageApi';
+import OpenWeatherMapApi from '../classes/OpenWeatherMapApi';
 
 export interface Action {
-  type: string,
+  type: string;
   newLang?: Language;
   newTempFormat?: Temperature;
   isRequesting?: boolean;
   newCoordinates?: Coordinates;
   locationName?: string;
-  timezoneOffsetSec?: number
+  timezone?: number;
+  newWeather?: FullWeather;
 }
 
 export const SET_REQUEST_STATE = 'SET_REQUEST_STATE';
@@ -32,15 +34,6 @@ export const changeTemperatureFormat = (newTempFormat: Temperature) => ({
   newTempFormat,
 });
 
-// export const getWeatherForLocation = () => {
-//   const thunkedAction = async (dispatch: Dispatch, getState: () => ApplicationState) => {
-//     const state: ApplicationState = getState();
-//     const { coords } = state;
-//   };
-
-//   return thunkedAction;
-// };
-
 export const SET_COORDINATES = 'SET_COORDINATES';
 export const setCoordinates = (newCoordinates: Coordinates) => ({
   type: SET_COORDINATES,
@@ -49,16 +42,13 @@ export const setCoordinates = (newCoordinates: Coordinates) => ({
 
 export const detectInitialLocation = () => {
   const thunkedAction = async (dispatch: Dispatch) => {
-    // blocking UI user from requesting new location
-    // dispatch(setRequestState(true));
-
     try {
       const newLocation: Coordinates = await GeoLocation.detectUserLocation();
       dispatch(setCoordinates(newLocation));
     } catch (error) {
       console.error(error);
     } finally {
-      // dispatch(setRequestState(false));
+      console.log('detectInitialLocation done');
     }
   };
 
@@ -66,7 +56,7 @@ export const detectInitialLocation = () => {
 };
 
 export const SET_LOCATION_DATA = 'SET_LOCATION_DATA';
-export const setLocationData = (payload: { locationName: string, timezoneOffsetSec: number }) => ({
+export const setLocationData = (payload: { locationName: string, timezone: string }) => ({
   type: SET_LOCATION_DATA,
   ...payload,
 });
@@ -77,12 +67,35 @@ export const getLocationData = (coords: Coordinates, language: string) => {
       const geoCoderResponse = await OpenCageApi
         .getLocationData(coords, language);
       console.log(geoCoderResponse);
-      const { locationName, timezoneOffsetSec } = geoCoderResponse;
-      dispatch(setLocationData({ locationName, timezoneOffsetSec }));
+      const { locationName, timezone } = geoCoderResponse;
+      dispatch(setLocationData({ locationName, timezone }));
     } catch (error) {
       console.error(error);
     } finally {
       console.log('getLocationDataByCoordinatesAndLanguage done');
+    }
+  };
+
+  return thunkedAction;
+};
+
+export const SET_WEATHER_DATA = 'SET_WEATHER_DATA';
+export const setWeatherData = (newWeather: FullWeather) => ({
+  type: SET_WEATHER_DATA,
+  newWeather,
+});
+
+export const getWeatherForLocation = () => {
+  const thunkedAction = async (dispatch: Dispatch, getState: () => ApplicationState) => {
+    try {
+      const state: ApplicationState = getState();
+      const { coords } = state;
+      const weather = await OpenWeatherMapApi.getWeatherByCoordinates(coords);
+      dispatch(setWeatherData(weather));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      console.log('getWeatherForLocation done');
     }
   };
 

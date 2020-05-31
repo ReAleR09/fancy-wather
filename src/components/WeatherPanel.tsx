@@ -19,7 +19,7 @@ const WeatherPanel: React.FunctionComponent<WeatherPanelProps> = (props: Weather
   } else {
     foreCastElement = weather.foreCast.map((daylyWeather) => (
       <div>
-        <div>{daylyWeather.dayOfWeek}</div>
+        <div>DayOfWeek</div>
         <div>{daylyWeather.type}</div>
         <div>{daylyWeather.temperature}</div>
       </div>

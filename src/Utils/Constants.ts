@@ -12,3 +12,13 @@ export const LANG_NAMES = [
 export type Temperature = 'C' | 'F';
 export const TEMP_C = 'C';
 export const TEMP_F = 'F';
+
+type Locales = {
+  [key: string]: string;
+}
+
+export const LOCALES: Locales = {
+  [LANG_RU]: 'ru-RU',
+  [LANG_EN]: 'en-US',
+  [LANG_BE]: 'be-BY',
+};

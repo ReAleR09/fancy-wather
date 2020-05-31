@@ -4,26 +4,33 @@ import { Paper } from '@material-ui/core';
 import { YMaps, Map } from 'react-yandex-maps';
 import { Coordinates, ApplicationState } from '../state/ApplicationState';
 import AppConfig from '../config';
+import { Language, LANG_EN } from '../Utils/Constants';
 
 const { apiKey } = AppConfig.yandex.maps;
 
 export interface MapPanelProps {
   coordinates?: Coordinates;
+  language?: Language;
 }
 
+const PLACEHOLDER = 'x.x';
+
 const MapPanel: React.FunctionComponent<MapPanelProps> = (props: MapPanelProps) => {
-  const { coordinates } = props;
+  const { coordinates, language } = props;
+
+  const center = coordinates ? [coordinates.latitude, coordinates.longitude] : [0, 0];
+  const lang = (language === LANG_EN ? 'en_US' : 'ru_RU');
 
   return (
     <Paper elevation={3}>
       <YMaps
         query={{
           apikey: apiKey,
-          // TODO lang:
+          lang,
         }}
       >
         <Map
-          state={{ center: [coordinates.latitude, coordinates.longitude], zoom: 10 }}
+          state={{ center, zoom: 10 }}
           width="100%"
           height="60vh"
         />
@@ -31,19 +38,20 @@ const MapPanel: React.FunctionComponent<MapPanelProps> = (props: MapPanelProps) 
       <div>
         <div>
           Latitude:
-          {coordinates.latitude}
+          {coordinates ? coordinates.latitude : PLACEHOLDER}
         </div>
         <div>
           Longitude:
-          {coordinates.longitude}
+          {coordinates ? coordinates.longitude : PLACEHOLDER}
         </div>
       </div>
     </Paper>
   );
 };
 
-const mapStateToProps = (state: ApplicationState /* , ownProps */) => ({
+const mapStateToProps = (state: ApplicationState) => ({
   coordinates: state.coords,
+  language: state.settings.language,
 });
 
 export default connect(

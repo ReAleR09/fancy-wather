@@ -1,21 +1,22 @@
 import { Language, Temperature } from '../Utils/Constants';
 
-interface DayWeather {
+// note the temperature units are Kelvins
+export interface DayWeather {
   temperature: number;
   type: string;
-  dayOfWeek?: number;
+  icon: string;
 }
 
 export interface LocationData {
   locationName: string;
-  timezoneOffsetSec: number;
+  timezone: string;
 }
 
 export interface FullWeather extends DayWeather {
   feels: number;
   wind: number;
   humidity: number;
-  foreCast: Array<DayWeather>;
+  foreCast?: Array<DayWeather>;
 }
 
 export interface Coordinates {
@@ -36,6 +37,6 @@ export interface ApplicationState {
     backgroundImage?: string;
   };
   weather?: FullWeather;
-  coords: Coordinates;
+  coords?: Coordinates;
   location?: LocationData;
 }

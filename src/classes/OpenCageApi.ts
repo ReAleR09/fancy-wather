@@ -30,11 +30,11 @@ const getLocationData = (coords: Coordinates, language: string = 'en', limit: nu
 
       const locationName = locationParts.join(', ');
 
-      const timezoneOffsetSec = result.annotations.timezone.offset_sec;
+      const timezone = result.annotations.timezone.name;
 
       return {
         locationName,
-        timezoneOffsetSec,
+        timezone,
       };
     });
 
