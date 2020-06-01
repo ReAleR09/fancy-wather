@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-console */
 import { Dispatch } from 'redux';
 import { Language, Temperature } from '../Utils/Constants';
 import { Coordinates, ApplicationState, FullWeather } from '../state/ApplicationState';
@@ -65,6 +67,7 @@ export const findLocationByQuery = (query: string) => {
       return;
     }
     try {
+      dispatch(changeRequestStatus('locationGeo', true));
       const newCoordinates = await OpenCageApi
         .getCoordinatesByQuery(query);
 
@@ -73,6 +76,7 @@ export const findLocationByQuery = (query: string) => {
       console.error(error);
       alert('Error: failed to find location');
     } finally {
+      dispatch(changeRequestStatus('locationGeo', false));
       console.log('findLocationByQuery done');
     }
   };
@@ -205,6 +209,7 @@ export const changeBackgroundImage = () => {
     } catch (error) {
       document.body.removeAttribute('style');
       console.error(error);
+      alert('Error: out of daily free requests to the unsplash api.');
     } finally {
       dispatch(changeRequestStatus('image', false));
       console.log('changeBackgroundImage done');

@@ -29,6 +29,13 @@ export interface Location {
   timeZone: string;
 }
 
+export interface RequestsState {
+  weather: boolean;
+  location: boolean;
+  image: boolean;
+  locationGeo: boolean;
+}
+
 export interface ApplicationState {
   settings: {
     language: Language;
@@ -39,9 +46,5 @@ export interface ApplicationState {
   coords?: Coordinates;
   location?: LocationData;
   keywords: Array<string> | 'random';
-  requests: {
-    weather: boolean;
-    location: boolean;
-    image: boolean;
-  }
+  requests: RequestsState;
 }

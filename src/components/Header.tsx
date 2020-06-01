@@ -23,6 +23,7 @@ export interface HeaderProps {
   changeTemperatureFormat: (newVal: unknown) => void;
   findLocationByQuery: (query: string) => void;
   changeBackgroundImage: () => void;
+  anyRequestActive: boolean;
 }
 
 const TRANSLATIONS: TranslationsTree = {
@@ -46,7 +47,7 @@ const SYMBOL_FAHRENHEIT = '°F';
 const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
   const languages = LANG_NAMES.map((lang) => (<MenuItem key={lang} value={lang}>{lang}</MenuItem>));
 
-  const { language, temperatueFormat } = props;
+  const { language, temperatueFormat, anyRequestActive } = props;
 
   const dispatchSwitchTempFormat = (newTempFormat: Temperature) => {
     props.changeTemperatureFormat(newTempFormat);
@@ -60,8 +61,11 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
       <Grid container spacing={3} justify="space-between">
         <Grid item xs={12} md={6}>
           <Button
+            disabled={anyRequestActive}
             onClick={() => {
-              props.changeBackgroundImage();
+              if (!anyRequestActive) {
+                props.changeBackgroundImage();
+              }
             }}
           >
             <div className="spinner" />
@@ -98,19 +102,25 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
             type="search"
             placeholder="*"
             style={{ width: '100%' }}
+            disabled={anyRequestActive}
             onChange={(event) => {
               setSearchInput(event.target.value);
             }}
             onKeyDown={(event) => {
               if (event.key === 'NumpadEnter' || event.key === 'Enter') {
-                props.findLocationByQuery(searchInput);
+                if (!anyRequestActive) {
+                  props.findLocationByQuery(searchInput);
+                }
               }
             }}
           />
           <Button
+            disabled={anyRequestActive}
             variant="outlined"
             onClick={() => {
-              props.findLocationByQuery(searchInput);
+              if (!anyRequestActive) {
+                props.findLocationByQuery(searchInput);
+              }
             }}
           >
             {TRANSLATOR(language, 'SEARCH_BUTTON')}
@@ -121,9 +131,11 @@ const Header: React.FunctionComponent<HeaderProps> = (props: HeaderProps) => {
   );
 };
 
-const mapStateToProps = (state: ApplicationState /* , ownProps */) => ({
+const mapStateToProps = (state: ApplicationState) => ({
   language: state.settings.language,
   temperatueFormat: state.settings.temperatureFormat,
+  anyRequestActive: (state.requests.image || state.requests.weather
+    || state.requests.location || state.requests.locationGeo),
 });
 
 const mapDispatchToProps = {

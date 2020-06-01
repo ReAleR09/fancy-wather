@@ -7,11 +7,14 @@ interface ProgressProps {
   locationRequest: boolean;
   weatherRequest: boolean;
   imageReqeust: boolean;
+  locationGeoRequest: boolean;
 }
 
 const Progress: React.FunctionComponent<ProgressProps> = (props: ProgressProps) => {
-  const { locationRequest, weatherRequest, imageReqeust } = props;
-  const isProgressing = locationRequest || weatherRequest || imageReqeust;
+  const {
+    locationRequest, weatherRequest, imageReqeust, locationGeoRequest,
+  } = props;
+  const isProgressing = locationRequest || weatherRequest || imageReqeust || locationGeoRequest;
   return (
     <CircularProgress
       color="secondary"
@@ -25,6 +28,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   locationRequest: state.requests.location,
   weatherRequest: state.requests.weather,
   imageReqeust: state.requests.image,
+  locationGeoRequest: state.requests.locationGeo,
 });
 
 
