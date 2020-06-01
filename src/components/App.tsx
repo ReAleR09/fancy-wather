@@ -12,16 +12,16 @@ import BackgroundChanger from './renderless/BackgroundChanger';
 const App = () => (
   <>
     <BackgroundChanger />
-    <Container maxWidth="xl">
+    <Container maxWidth="lg">
       <AppBar position="static">
         <Header />
       </AppBar>
 
       <Grid container spacing={3} justify="space-between" style={{ marginTop: '10px' }}>
-        <Grid item xs={12} md={7}>
+        <Grid item md={7} xs={12}>
           <WeatherPanel />
         </Grid>
-        <Grid item xs={12} md={5}>
+        <Grid item md={5} xs={12}>
           <MapPanel />
         </Grid>
       </Grid>

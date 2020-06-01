@@ -28,7 +28,7 @@ body {
   padding: 14px;
   &__current {
     &_temp {
-      font-size: 16rem;
+      font-size: 10rem;
     }
     &_icon {
       width: 8rem;
@@ -36,16 +36,77 @@ body {
       background-size: cover;
     }
     &_desc {
-      font-size: 3rem;
+      font-size: 1.5rem;
     }
     &_feels {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
     &_wind {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
     &_humidity {
-      font-size: 2rem;
+      font-size: 1.5rem;
+    }
+  }
+
+  &__daily {
+    font-size: 1.5rem;
+    display: flex;
+  }
+}
+
+.map-panel {
+  background-color: rgba($color:#FFFFFF, $alpha: 0.6)!important;
+  &__coord {
+    font-size: 2rem;
+    padding: 10px;
+  }
+  &__map {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 50% 100%, 0 90%);
+  }
+}
+
+.location {
+  &__name {
+    font-size: 4rem;
+  }
+  &_time {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 960px) {
+  .location {
+    &__name {
+      font-size: 2.5rem;
+    }
+    &_time {
+      font-size: 1.5rem;
+    }
+  }
+
+  .weather {
+    &__current {
+      &_temp {
+        font-size: 6rem;
+      }
+      &_icon {
+        width: 6rem;
+        height: 6rem;
+        background-size: cover;
+      }
+      &_desc {
+        font-size: 2rem;
+      }
+      &_feels {
+        font-size: 1.5rem;
+      }
+      &_wind {
+        font-size: 1.5rem;
+      }
+      &_humidity {
+        font-size: 1.5rem;
+      }
     }
   }
 }

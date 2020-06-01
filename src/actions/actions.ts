@@ -71,6 +71,7 @@ export const findLocationByQuery = (query: string) => {
       dispatch(setCoordinates(newCoordinates));
     } catch (error) {
       console.error(error);
+      alert('Error: failed to find location');
     } finally {
       console.log('findLocationByQuery done');
     }
@@ -91,7 +92,6 @@ export const getLocationData = (coords: Coordinates, language: string) => {
       dispatch(changeRequestStatus('locationData', true));
       const geoCoderResponse = await OpenCageApi
         .getLocationData(coords, language);
-      console.log(geoCoderResponse);
       const { locationName, timezone } = geoCoderResponse;
       dispatch(setLocationData({ locationName, timezone }));
     } catch (error) {
@@ -131,6 +131,7 @@ export const getWeatherForLocation = () => {
 export const changeBackgroundImage = () => {
   const thunkedAction = async (dispatch: Dispatch, getState: () => ApplicationState) => {
     try {
+      dispatch(changeRequestStatus('image', true));
       const state: ApplicationState = getState();
       // we didn't set any location data yet, meaning we're only on the startup of the app
       if (state.location === undefined) return;
@@ -143,6 +144,26 @@ export const changeBackgroundImage = () => {
       keyWords.push(weatherKeyword);
       // getting time dependant keywords
       const date = new Date();
+      const month = date.getMonth();
+      switch (month) {
+        case 0:
+        case 1:
+        case 11:
+          keyWords.push('winter');
+          break;
+        case 2:
+        case 3:
+        case 4:
+          keyWords.push('spring');
+          break;
+        case 5:
+        case 6:
+        case 7:
+          keyWords.push('summer');
+          break;
+        default:
+          keyWords.push('autumn');
+      }
       const formatter = new Intl.DateTimeFormat(
         'en-US',
         {
@@ -170,6 +191,8 @@ export const changeBackgroundImage = () => {
       }
       keyWords.push(timeOfDayKeyword);
 
+      console.log(`Запрос картинки с ключ. словами: ${keyWords.join(', ')}`);
+
       const imgUrl = await UnsplashApi.getRandomPhotoByKeywords(keyWords);
 
       const image = new Image();
@@ -180,8 +203,10 @@ export const changeBackgroundImage = () => {
 
       console.log(imgUrl);
     } catch (error) {
+      document.body.removeAttribute('style');
       console.error(error);
     } finally {
+      dispatch(changeRequestStatus('image', false));
       console.log('changeBackgroundImage done');
     }
   };

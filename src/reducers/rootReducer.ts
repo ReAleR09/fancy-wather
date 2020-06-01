@@ -29,6 +29,7 @@ const initialState: ApplicationState = {
   requests: {
     weather: false,
     location: false,
+    image: false,
   },
 };
 
@@ -64,6 +65,9 @@ const rootReducer = (state: ApplicationState = initialState, action: Action) => 
           break;
         case 'weather':
           newState.requests.weather = action.statusValue;
+          break;
+        case 'image':
+          newState.requests.image = action.statusValue;
           break;
         default:
           console.log(`Incorrect request status name: ${action.status}`);

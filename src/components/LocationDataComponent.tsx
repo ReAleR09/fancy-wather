@@ -52,11 +52,11 @@ const LocationDataComponent: React.FunctionComponent<LocationDataComponentProps>
 
   return (
     <>
-      <Grid item md={12}>
-        <div style={{ fontSize: '4.4rem' }}>{locationData ? locationData.locationName : PLACEHOLDER}</div>
+      <Grid item xs={12} md={12}>
+        <div className="location__name">{locationData ? locationData.locationName : PLACEHOLDER}</div>
       </Grid>
-      <Grid item md={12}>
-        <div style={{ fontSize: '2.2rem' }}>{dateTimeString}</div>
+      <Grid item xs={12} md={12}>
+        <div className="location__time" style={{ fontSize: '2.2rem' }}>{dateTimeString}</div>
       </Grid>
     </>
   );

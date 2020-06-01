@@ -14,7 +14,7 @@ const WEATHER_TRANSLATIONS: TranslationsTree = {
   },
   Rain: {
     [LANG_EN]: 'Rain',
-    [LANG_RU]: 'Джодь',
+    [LANG_RU]: 'Дождь',
     [LANG_BE]: 'Дождж',
   },
   Snow: {
@@ -76,6 +76,26 @@ const WEATHER_TRANSLATIONS: TranslationsTree = {
     [LANG_EN]: 'Clouds',
     [LANG_RU]: 'Облачно',
     [LANG_BE]: 'Воблачна',
+  },
+  WIND: {
+    [LANG_EN]: 'Wind',
+    [LANG_RU]: 'Ветер',
+    [LANG_BE]: 'Вецер',
+  },
+  FEELS: {
+    [LANG_EN]: 'Feels',
+    [LANG_RU]: 'Ощущается',
+    [LANG_BE]: 'Адчуваецца',
+  },
+  WIND_SPEED_MS: {
+    [LANG_EN]: 'm/s',
+    [LANG_RU]: 'м/с',
+    [LANG_BE]: 'м/с',
+  },
+  HUMIDITY: {
+    [LANG_EN]: 'Humidity',
+    [LANG_RU]: 'Влажность',
+    [LANG_BE]: 'Вільготнасць',
   },
 };
 

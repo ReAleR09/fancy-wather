@@ -42,5 +42,6 @@ export interface ApplicationState {
   requests: {
     weather: boolean;
     location: boolean;
+    image: boolean;
   }
 }

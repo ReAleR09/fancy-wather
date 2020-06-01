@@ -4,7 +4,10 @@ import { Paper } from '@material-ui/core';
 import { YMaps, Map, Placemark } from 'react-yandex-maps';
 import { Coordinates, ApplicationState } from '../state/ApplicationState';
 import AppConfig from '../config';
-import { Language, LANG_EN } from '../Utils/Constants';
+import {
+  Language, LANG_EN, LANG_RU, LANG_BE,
+} from '../Utils/Constants';
+import { TranslationsTree, createTranslator } from '../Utils/Translator';
 
 const { apiKey } = AppConfig.yandex.maps;
 
@@ -15,6 +18,38 @@ export interface MapPanelProps {
 
 const PLACEHOLDER = 'x.x';
 
+const TRANSLATIONS: TranslationsTree = {
+  LATITUDE: {
+    [LANG_RU]: 'Широта',
+    [LANG_EN]: 'Latitude',
+    [LANG_BE]: 'Шыраты',
+  },
+  LONGITUDE: {
+    [LANG_RU]: 'Долгота',
+    [LANG_EN]: 'Longitude',
+    [LANG_BE]: 'Даўгата',
+  },
+};
+const TRANSLATE = createTranslator(TRANSLATIONS);
+
+const formatCoord = (coord: number, lat: boolean = false) => {
+  let direction: string;
+  if (lat) {
+    if (coord > 0) {
+      direction = 'N';
+    } else {
+      direction = 'S';
+    }
+  } else if (coord > 0) {
+    direction = 'E';
+  } else {
+    direction = 'W';
+  }
+  const deg = Math.floor(coord);
+  const min = Math.floor((coord - deg) * 60);
+  return `${direction} ${Math.abs(deg)}' ${min} '' `;
+};
+
 const MapPanel: React.FunctionComponent<MapPanelProps> = (props: MapPanelProps) => {
   const { coordinates, language } = props;
 
@@ -22,29 +57,29 @@ const MapPanel: React.FunctionComponent<MapPanelProps> = (props: MapPanelProps) 
   const lang = (language === LANG_EN ? 'en_US' : 'ru_RU');
 
   return (
-    <Paper elevation={3}>
-      <YMaps
-        query={{
-          apikey: apiKey,
-          lang,
-        }}
-      >
-        <Map
-          state={{ center, zoom: 10 }}
-          width="100%"
-          height="60vh"
+    <Paper elevation={3} className="map-panel">
+      <div className="map-panel__map">
+        <YMaps
+          query={{
+            apikey: apiKey,
+            lang,
+          }}
         >
-          <Placemark geometry={center} />
-        </Map>
-      </YMaps>
+          <Map
+            state={{ center, zoom: 10 }}
+            width="100%"
+            height="60vh"
+          >
+            <Placemark geometry={center} />
+          </Map>
+        </YMaps>
+      </div>
       <div>
-        <div>
-          Latitude:
-          {coordinates ? coordinates.latitude : PLACEHOLDER}
+        <div className="map-panel__coord">
+          {`${TRANSLATE(language, 'LATITUDE')}: ${coordinates ? formatCoord(coordinates.latitude, true) : PLACEHOLDER}`}
         </div>
-        <div>
-          Longitude:
-          {coordinates ? coordinates.longitude : PLACEHOLDER}
+        <div className="map-panel__coord">
+          {`${TRANSLATE(language, 'LONGITUDE')}: ${coordinates ? formatCoord(coordinates.longitude) : PLACEHOLDER}`}
         </div>
       </div>
     </Paper>
