@@ -47,7 +47,7 @@ const formatCoord = (coord: number, lat: boolean = false) => {
   }
   const deg = Math.floor(coord);
   const min = Math.floor((coord - deg) * 60);
-  return `${direction} ${Math.abs(deg)}' ${min} '' `;
+  return `${direction} ${Math.abs(deg)}° ${min} ' `;
 };
 
 const MapPanel: React.FunctionComponent<MapPanelProps> = (props: MapPanelProps) => {
